@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RBLX Trade Hub Pro</title>
+<title>RBLX Trade Hub</title>
 
 <style>
 
@@ -17,15 +17,15 @@ color:white;
 }
 
 header{
-background:linear-gradient(90deg,#2563eb,#1d4ed8);
+background:#2563eb;
 padding:25px;
 text-align:center;
-font-size:20px;
+font-size:22px;
 font-weight:bold;
 }
 
 .container{
-max-width:1000px;
+max-width:900px;
 margin:auto;
 padding:20px;
 }
@@ -33,7 +33,7 @@ padding:20px;
 .card{
 background:#111827;
 padding:18px;
-border-radius:15px;
+border-radius:12px;
 margin-bottom:15px;
 box-shadow:0 0 10px rgba(0,0,0,0.3);
 }
@@ -64,18 +64,16 @@ border-radius:10px;
 font-weight:bold;
 color:white;
 cursor:pointer;
-transition:0.2s;
 }
 
 button:hover{
 background:#16a34a;
-transform:scale(1.02);
 }
 
 .trade{
 background:#1f2937;
 padding:15px;
-border-radius:12px;
+border-radius:10px;
 margin-top:10px;
 transition:0.2s;
 }
@@ -108,7 +106,7 @@ margin-bottom:15px;
 flex:1;
 background:#111827;
 padding:15px;
-border-radius:12px;
+border-radius:10px;
 text-align:center;
 }
 
@@ -128,7 +126,7 @@ color:#60a5fa;
 <body>
 
 <header>
-🎮 RBLX Trade Hub Pro
+🎮 RBLX Trade Hub
 </header>
 
 <div class="container">
@@ -142,7 +140,7 @@ color:#60a5fa;
 
 <div class="stat">
 <h2>🔥</h2>
-<p>Plateforme active</p>
+<p>Trading</p>
 </div>
 
 </div>
@@ -151,7 +149,7 @@ color:#60a5fa;
 
 <h2>Créer une offre</h2>
 
-<input id="user" placeholder="Ton pseudo Roblox">
+<input id="user" placeholder="Pseudo Roblox">
 
 <select id="game">
 
@@ -170,7 +168,7 @@ color:#60a5fa;
 
 </select>
 
-<textarea id="offer" placeholder="Décris ton échange"></textarea>
+<textarea id="offer" placeholder="Ton échange"></textarea>
 
 <button onclick="addTrade()">Publier</button>
 
@@ -180,7 +178,7 @@ color:#60a5fa;
 
 <h2>🔍 Recherche</h2>
 
-<input id="search" onkeyup="render()" placeholder="Rechercher une offre">
+<input id="search" onkeyup="render()" placeholder="Rechercher...">
 
 </div>
 
@@ -249,9 +247,13 @@ render();
 }
 
 function removeTrade(i){
+
 trades.splice(i,1);
+
 localStorage.setItem("trades",JSON.stringify(trades));
+
 render();
+
 }
 
 render();
