@@ -1,17 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBLX Trade Hub Pro</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+}
+
+header{
+background:linear-gradient(90deg,#2563eb,#7c3aed);
+padding:20px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:#111827;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#1f2937;
+color:white;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#22c55e;
+border:none;
+border-radius:8px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.trade{
+background:#1f2937;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
+
+.chatBox{
+height:160px;
+overflow:auto;
+background:#0f172a;
+padding:10px;
+border-radius:10px;
+}
+
+.small{
+font-size:12px;
+color:#aaa;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+🎮 RBLX Trade Hub Pro
+</header>
+
+<div class="container">
+
+<!-- OFFRES -->
 <div class="card">
-<h2>💬 Chat mondial</h2>
 
-<div id="chatBox" style="height:180px;overflow:auto;background:#0f172a;padding:10px;border-radius:10px;"></div>
+<h2>Créer une offre</h2>
 
-<input id="msg" placeholder="Écris un message...">
-<button onclick="sendMsg()">Envoyer</button>
+<input id="user" placeholder="Pseudo Roblox">
+<input id="game" placeholder="Jeu">
+<textarea id="offer" placeholder="Ton échange"></textarea>
+
+<button onclick="addTrade()">Publier</button>
+
 </div>
 
+<!-- CHAT MONDIAL -->
+<div class="card">
+
+<h2>💬 Chat mondial</h2>
+
+<div id="chatBox" class="chatBox"></div>
+
+<input id="msg" placeholder="Message">
+<button onclick="sendMsg()">Envoyer</button>
+
+</div>
+
+<!-- LISTE -->
+<div id="list"></div>
+
+</div>
+
+<script>
+
+// OFFRES
+let trades=[];
+
+function addTrade(){
+
+let user=document.getElementById("user").value;
+let game=document.getElementById("game").value;
+let offer=document.getElementById("offer").value;
+
+if(!user||!game||!offer) return alert("Remplis tout");
+
+trades.unshift({user,game,offer});
+render();
+}
+
+function render(){
+
+let list=document.getElementById("list");
+list.innerHTML="";
+
+trades.forEach(t=>{
+
+list.innerHTML+=`
+<div class="trade">
+<b>👤 ${t.user}</b> - 🎮 ${t.game}
+<p class="small">${t.offer}</p>
+</div>
+`;
+
+});
+
+}
+
+render();
+
+</script>
+
+<!-- 🔥 FIREBASE CHAT MONDIAL -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 🔥 REMPLACE ICI AVEC TON FIREBASE
+// ⚠️ REMPLACE ICI
 const firebaseConfig = {
   apiKey: "TON_API_KEY",
   authDomain: "TON_PROJECT.firebaseapp.com",
@@ -22,25 +176,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 📤 envoyer message
+// ENVOYER
 window.sendMsg = function(){
-let msg = document.getElementById("msg").value;
+let msg=document.getElementById("msg").value;
 if(!msg) return;
 
 push(ref(db,"chat"),{
-text: msg,
-time: Date.now()
+text:msg,
+time:Date.now()
 });
 
 document.getElementById("msg").value="";
 };
 
-// 📡 recevoir messages
-onChildAdded(ref(db,"chat"), (data)=>{
-let val = data.val();
+// RECEVOIR
+onChildAdded(ref(db,"chat"),(data)=>{
+let v=data.val();
 
-document.getElementById("chatBox").innerHTML +=
-`<div>💬 ${val.text}</div>`;
+document.getElementById("chatBox").innerHTML+=
+`<div>💬 ${v.text}</div>`;
 });
+
 </script>
 
+</body>
+</html>
