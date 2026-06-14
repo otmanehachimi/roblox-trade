@@ -5,73 +5,120 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RBLX Trade Hub</title>
+<title>RBLX Trade Hub Pro</title>
 
 <style>
 
 body{
-font-family:Arial;
 margin:0;
+font-family:Arial;
 background:#0b1220;
 color:white;
 }
 
 header{
-background:#2563eb;
-padding:20px;
+background:linear-gradient(90deg,#2563eb,#1d4ed8);
+padding:25px;
 text-align:center;
+font-size:20px;
+font-weight:bold;
 }
 
 .container{
-max-width:900px;
+max-width:1000px;
 margin:auto;
 padding:20px;
 }
 
 .card{
 background:#111827;
-padding:15px;
-border-radius:10px;
+padding:18px;
+border-radius:15px;
 margin-bottom:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
 }
 
-input, textarea, select{
+input,select,textarea{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
-border-radius:8px;
 border:none;
+border-radius:10px;
 background:#1f2937;
 color:white;
+outline:none;
+}
+
+textarea{
+height:90px;
+resize:none;
 }
 
 button{
-margin-top:10px;
-padding:10px;
 width:100%;
+padding:12px;
+margin-top:10px;
 background:#22c55e;
 border:none;
-color:white;
+border-radius:10px;
 font-weight:bold;
+color:white;
 cursor:pointer;
-border-radius:8px;
+transition:0.2s;
+}
+
+button:hover{
+background:#16a34a;
+transform:scale(1.02);
 }
 
 .trade{
 background:#1f2937;
-padding:10px;
-border-radius:8px;
+padding:15px;
+border-radius:12px;
 margin-top:10px;
+transition:0.2s;
 }
 
-.delete{
-background:red;
-margin-top:5px;
+.trade:hover{
+transform:scale(1.02);
 }
 
 .small{
 font-size:12px;
 color:#aaa;
+}
+
+.delete{
+background:red;
+margin-top:8px;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+.stats{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
+
+.stat{
+flex:1;
+background:#111827;
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+.stat h2{
+margin:0;
+color:#60a5fa;
+}
+
+@media(max-width:700px){
+.stats{flex-direction:column;}
 }
 
 </style>
@@ -81,11 +128,24 @@ color:#aaa;
 <body>
 
 <header>
-<h1>🎮 RBLX Trade Hub</h1>
-<p>Échange d’objets Roblox</p>
+🎮 RBLX Trade Hub Pro
 </header>
 
 <div class="container">
+
+<div class="stats">
+
+<div class="stat">
+<h2 id="count">0</h2>
+<p>Offres</p>
+</div>
+
+<div class="stat">
+<h2>🔥</h2>
+<p>Plateforme active</p>
+</div>
+
+</div>
 
 <div class="card">
 
@@ -106,11 +166,7 @@ color:#aaa;
 <option>Anime Adventures</option>
 <option>Fisch</option>
 <option>Grow a Garden</option>
-
-<!-- AJOUT -->
 <option>Steal a Brainrot</option>
-
-<option>Autre</option>
 
 </select>
 
@@ -120,7 +176,13 @@ color:#aaa;
 
 </div>
 
-<h2>📦 Offres disponibles</h2>
+<div class="card">
+
+<h2>🔍 Recherche</h2>
+
+<input id="search" onkeyup="render()" placeholder="Rechercher une offre">
+
+</div>
 
 <div id="list"></div>
 
@@ -133,15 +195,23 @@ let trades = JSON.parse(localStorage.getItem("trades")) || [];
 function render(){
 
 let list = document.getElementById("list");
-list.innerHTML = "";
+list.innerHTML="";
 
-trades.forEach((t,i)=>{
+let search = document.getElementById("search").value.toLowerCase();
+
+let filtered = trades.filter(t =>
+(t.user + t.game + t.offer).toLowerCase().includes(search)
+);
+
+document.getElementById("count").innerText = filtered.length;
+
+filtered.forEach((t,i)=>{
 
 list.innerHTML += `
 <div class="trade">
 
-<b>${t.user}</b>
-<span class="small">- ${t.game}</span>
+<b>👤 ${t.user}</b>
+<span class="small"> - 🎮 ${t.game}</span>
 
 <p>${t.offer}</p>
 
@@ -167,9 +237,9 @@ alert("Remplis tout !");
 return;
 }
 
-trades.push({user, game, offer});
+trades.unshift({user,game,offer});
 
-localStorage.setItem("trades", JSON.stringify(trades));
+localStorage.setItem("trades",JSON.stringify(trades));
 
 document.getElementById("user").value="";
 document.getElementById("offer").value="";
@@ -180,7 +250,7 @@ render();
 
 function removeTrade(i){
 trades.splice(i,1);
-localStorage.setItem("trades", JSON.stringify(trades));
+localStorage.setItem("trades",JSON.stringify(trades));
 render();
 }
 
@@ -190,8 +260,3 @@ render();
 
 </body>
 </html>
-
-
-
-
-
