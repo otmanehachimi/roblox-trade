@@ -11,7 +11,7 @@
 body{
 margin:0;
 font-family:Arial;
-background:#0b1220;
+background:linear-gradient(135deg,#0b1220,#0f172a);
 color:white;
 }
 
@@ -19,7 +19,7 @@ header{
 background:linear-gradient(90deg,#2563eb,#7c3aed);
 padding:20px;
 text-align:center;
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 }
 
@@ -36,7 +36,7 @@ border-radius:12px;
 margin-bottom:15px;
 }
 
-input,textarea{
+input,select,textarea{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -44,6 +44,7 @@ border:none;
 border-radius:8px;
 background:#1f2937;
 color:white;
+outline:none;
 }
 
 button{
@@ -53,9 +54,13 @@ margin-top:10px;
 background:#22c55e;
 border:none;
 border-radius:8px;
-color:white;
 font-weight:bold;
+color:white;
 cursor:pointer;
+}
+
+button:hover{
+background:#16a34a;
 }
 
 .trade{
@@ -63,19 +68,19 @@ background:#1f2937;
 padding:10px;
 border-radius:10px;
 margin-top:10px;
+border-left:4px solid #22c55e;
 }
 
 .chatBox{
-height:160px;
+height:180px;
 overflow:auto;
 background:#0f172a;
 padding:10px;
 border-radius:10px;
 }
 
-.small{
-font-size:12px;
-color:#aaa;
+.msg{
+margin-bottom:5px;
 }
 
 </style>
@@ -90,20 +95,28 @@ color:#aaa;
 
 <div class="container">
 
-<!-- OFFRES -->
+<!-- TRADE -->
 <div class="card">
 
-<h2>Créer une offre</h2>
+<h2>📦 Créer une offre</h2>
 
 <input id="user" placeholder="Pseudo Roblox">
+
+<select id="type">
+<option>Objet → Objet</option>
+<option>Objet → Robux</option>
+<option>Robux → Objet</option>
+</select>
+
 <input id="game" placeholder="Jeu">
+
 <textarea id="offer" placeholder="Ton échange"></textarea>
 
 <button onclick="addTrade()">Publier</button>
 
 </div>
 
-<!-- CHAT MONDIAL -->
+<!-- CHAT -->
 <div class="card">
 
 <h2>💬 Chat mondial</h2>
@@ -115,26 +128,28 @@ color:#aaa;
 
 </div>
 
-<!-- LISTE -->
+<!-- LIST -->
 <div id="list"></div>
 
 </div>
 
 <script>
 
-// OFFRES
+// ===== TRADES =====
 let trades=[];
 
 function addTrade(){
 
 let user=document.getElementById("user").value;
+let type=document.getElementById("type").value;
 let game=document.getElementById("game").value;
 let offer=document.getElementById("offer").value;
 
 if(!user||!game||!offer) return alert("Remplis tout");
 
-trades.unshift({user,game,offer});
+trades.unshift({user,type,game,offer});
 render();
+
 }
 
 function render(){
@@ -146,8 +161,9 @@ trades.forEach(t=>{
 
 list.innerHTML+=`
 <div class="trade">
-<b>👤 ${t.user}</b> - 🎮 ${t.game}
-<p class="small">${t.offer}</p>
+<b>👤 ${t.user}</b> - ${t.type}
+<br>🎮 ${t.game}
+<p>${t.offer}</p>
 </div>
 `;
 
@@ -159,13 +175,13 @@ render();
 
 </script>
 
-<!-- 🔥 FIREBASE CHAT MONDIAL -->
+<!-- ===== FIREBASE CHAT MONDIAL ===== -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ⚠️ REMPLACE ICI
+// ⚠️ REMPLACE ICI AVEC TON FIREBASE
 const firebaseConfig = {
   apiKey: "TON_API_KEY",
   authDomain: "TON_PROJECT.firebaseapp.com",
@@ -193,8 +209,8 @@ document.getElementById("msg").value="";
 onChildAdded(ref(db,"chat"),(data)=>{
 let v=data.val();
 
-document.getElementById("chatBox").innerHTML+=
-`<div>💬 ${v.text}</div>`;
+document.getElementById("chatBox").innerHTML +=
+`<div class="msg">💬 ${v.text}</div>`;
 });
 
 </script>
