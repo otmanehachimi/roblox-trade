@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBLX Trade Hub</title>
+<title>RBLX Trade Hub Pro</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial;
@@ -14,9 +16,11 @@ color:white;
 }
 
 header{
-background:#2563eb;
+background:linear-gradient(90deg,#2563eb,#7c3aed);
 padding:20px;
 text-align:center;
+font-size:22px;
+font-weight:bold;
 }
 
 .container{
@@ -28,7 +32,7 @@ padding:20px;
 .card{
 background:#111827;
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 margin-bottom:15px;
 }
 
@@ -36,8 +40,10 @@ input,select,textarea{
 width:100%;
 padding:10px;
 margin-top:10px;
-border-radius:8px;
 border:none;
+border-radius:8px;
+background:#1f2937;
+color:white;
 }
 
 button{
@@ -46,18 +52,41 @@ padding:10px;
 margin-top:10px;
 background:#22c55e;
 border:none;
-color:white;
 border-radius:8px;
+color:white;
+font-weight:bold;
 cursor:pointer;
 }
 
 .trade{
 background:#1f2937;
 padding:10px;
-border-radius:8px;
+border-radius:10px;
 margin-top:10px;
 }
+
+.trade img{
+width:100%;
+height:140px;
+object-fit:cover;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.chatBox{
+height:150px;
+overflow:auto;
+background:#0f172a;
+padding:10px;
+border-radius:10px;
+}
+
+.msg{
+margin-bottom:5px;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -68,7 +97,6 @@ margin-top:10px;
 
 <div class="container">
 
-<!-- OFFRES -->
 <div class="card">
 <h2>Créer une offre</h2>
 
@@ -80,6 +108,12 @@ margin-top:10px;
 <option>Pet Simulator 99</option>
 <option>Blade Ball</option>
 <option>Brookhaven RP</option>
+<option>Murder Mystery 2</option>
+<option>Jailbreak</option>
+<option>King Legacy</option>
+<option>Anime Adventures</option>
+<option>Fisch</option>
+<option>Grow a Garden</option>
 <option>Steal a Brainrot</option>
 </select>
 
@@ -88,11 +122,10 @@ margin-top:10px;
 <button onclick="addTrade()">Publier</button>
 </div>
 
-<!-- CHAT -->
 <div class="card">
-<h2>💬 Chat global</h2>
+<h2>💬 Chat</h2>
 
-<div id="chatBox" style="height:150px;overflow:auto;background:#0f172a;padding:10px;border-radius:10px;"></div>
+<div id="chatBox" class="chatBox"></div>
 
 <input id="msg" placeholder="Message">
 <button onclick="sendMsg()">Envoyer</button>
@@ -104,49 +137,74 @@ margin-top:10px;
 
 <script>
 
-// OFFRES
+// images des jeux
+const gameImages = {
+"Blox Fruits":"https://tr.rbxcdn.com/placeholder",
+"Adopt Me!":"https://tr.rbxcdn.com/placeholder",
+"Pet Simulator 99":"https://tr.rbxcdn.com/placeholder",
+"Blade Ball":"https://tr.rbxcdn.com/placeholder",
+"Brookhaven RP":"https://tr.rbxcdn.com/placeholder",
+"Murder Mystery 2":"https://tr.rbxcdn.com/placeholder",
+"Jailbreak":"https://tr.rbxcdn.com/placeholder",
+"King Legacy":"https://tr.rbxcdn.com/placeholder",
+"Anime Adventures":"https://tr.rbxcdn.com/placeholder",
+"Fisch":"https://tr.rbxcdn.com/placeholder",
+"Grow a Garden":"https://tr.rbxcdn.com/placeholder",
+"Steal a Brainrot":"https://tr.rbxcdn.com/placeholder"
+};
+
 let trades = [];
 
 function addTrade(){
-let user = document.getElementById("user").value;
-let game = document.getElementById("game").value;
-let offer = document.getElementById("offer").value;
 
-if(!user || !game || !offer) return alert("Remplis tout");
+let user=document.getElementById("user").value;
+let game=document.getElementById("game").value;
+let offer=document.getElementById("offer").value;
+
+if(!user||!game||!offer) return alert("Remplis tout");
 
 trades.unshift({user,game,offer});
 render();
 }
 
 function render(){
-let list = document.getElementById("list");
+
+let list=document.getElementById("list");
 list.innerHTML="";
 
 trades.forEach(t=>{
-list.innerHTML += `
+
+list.innerHTML+=`
 <div class="trade">
-<b>${t.user}</b> - ${t.game}
+
+<img src="${gameImages[t.game]}" onerror="this.style.display='none'">
+
+<b>👤 ${t.user}</b> - 🎮 ${t.game}
+
 <p>${t.offer}</p>
+
 </div>
 `;
+
 });
+
 }
 
-// CHAT (LOCAL)
 function sendMsg(){
-let msg = document.getElementById("msg").value;
+
+let msg=document.getElementById("msg").value;
 if(!msg) return;
 
-document.getElementById("chatBox").innerHTML +=
-`<div>💬 ${msg}</div>`;
+document.getElementById("chatBox").innerHTML+=
+`<div class="msg">💬 ${msg}</div>`;
 
 document.getElementById("msg").value="";
 }
 
+render();
+
 </script>
 
 </body>
+
 </html>
-git add .
-git commit -m "update site"
-git push
